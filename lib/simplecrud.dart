@@ -1,3 +1,4 @@
+import 'package:firebase_demo_1/firebase_api_services.dart';
 import 'package:flutter/material.dart';
 
 class SimpleCrudDemo extends StatefulWidget {
@@ -12,18 +13,18 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            TextField(
-              controller: nameController,
-            ),
-            MaterialButton(
-              onPressed: () {},
-              child: const Text('submit'),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          TextField(
+            controller: nameController,
+          ),
+          MaterialButton(
+            onPressed: () {
+              FirebaseApi.addUser(userName: nameController.text);
+            },
+            child: const Text('submit'),
+          ),
+        ],
       ),
     );
   }
