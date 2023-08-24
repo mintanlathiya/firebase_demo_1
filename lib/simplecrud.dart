@@ -209,12 +209,14 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                         },
                         child: Column(
                           children: [
-                            Text(snapshot.data![index]['key']),
-                            Text(snapshot.data![index]['userName']),
-                            Text(snapshot.data![index]['lastName']),
-                            Text(snapshot.data![index]['gender']),
-                            Text(snapshot.data![index]['hobby'].toString()),
-                            Text(snapshot.data![index]['salary'].toString()),
+                            Text('Key: ${snapshot.data![index]['key']}'),
+                            Text(
+                                'UserName: ${snapshot.data![index]['userName']}'),
+                            Text(
+                                ' LastName: ${snapshot.data![index]['lastName']}'),
+                            Text('Gender: ${snapshot.data![index]['gender']}'),
+                            Text('Hobby: ${snapshot.data![index]['hobby']}'),
+                            Text('Salary: ${snapshot.data![index]['salary']}'),
                           ],
                         ),
                       ),
