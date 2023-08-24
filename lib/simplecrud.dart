@@ -10,21 +10,84 @@ class SimpleCrudDemo extends StatefulWidget {
 
 class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
   TextEditingController nameController = TextEditingController();
+  late Future<List<Map>> futureUserData;
+  bool update = false;
+  String selectKey = '';
+
+  @override
+  void initState() {
+    futureUserData = FirebaseApi.selectData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          TextField(
-            controller: nameController,
-          ),
-          MaterialButton(
-            onPressed: () {
-              FirebaseApi.addUser(userName: nameController.text);
-            },
-            child: const Text('submit'),
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+            ),
+            const SizedBox(height: 10),
+            MaterialButton(
+              onPressed: update == true
+                  ? () async {
+                      await FirebaseApi.updateData(
+                          key: selectKey, userName: nameController.text);
+                      futureUserData = FirebaseApi.selectData();
+                      update = false;
+                      setState(() {});
+                    }
+                  : () async {
+                      await FirebaseApi.addUser(userName: nameController.text);
+                      futureUserData = FirebaseApi.selectData();
+                      // nameController.clear();
+                      setState(() {});
+                    },
+              child: Text(update == false ? 'submit' : 'update'),
+            ),
+            const SizedBox(height: 10),
+            FutureBuilder(
+              future: futureUserData,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                      child: ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () {
+                        update = true;
+                        selectKey = snapshot.data![index]['key'];
+                        nameController.text = snapshot.data![index]['userName'];
+                        setState(() {});
+                      },
+                      child: Dismissible(
+                        key: UniqueKey(),
+                        onDismissed: (direction) async {
+                          await FirebaseApi.removeData(
+                              key: snapshot.data![index]['key']);
+                          update = false;
+                          futureUserData = FirebaseApi.selectData();
+
+                          setState(() {});
+                        },
+                        child: ListTile(
+                          title: Text(
+                            snapshot.data![index]['userName'],
+                          ),
+                          subtitle: Text(snapshot.data![index]['key']),
+                        ),
+                      ),
+                    ),
+                  ));
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }
