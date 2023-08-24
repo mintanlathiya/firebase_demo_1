@@ -10,6 +10,8 @@ class SimpleCrudDemo extends StatefulWidget {
 
 class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
   TextEditingController nameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+
   late Future<List<Map>> futureUserData;
   bool update = false;
   String selectKey = '';
@@ -29,18 +31,25 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
             TextField(
               controller: nameController,
             ),
+            TextField(
+              controller: lastNameController,
+            ),
             const SizedBox(height: 10),
             MaterialButton(
               onPressed: update == true
                   ? () async {
                       await FirebaseApi.updateData(
-                          key: selectKey, userName: nameController.text);
+                          key: selectKey,
+                          userName: nameController.text,
+                          lastName: lastNameController.text);
                       futureUserData = FirebaseApi.selectData();
                       update = false;
                       setState(() {});
                     }
                   : () async {
-                      await FirebaseApi.addUser(userName: nameController.text);
+                      await FirebaseApi.addUser(
+                          userName: nameController.text,
+                          lastName: lastNameController.text);
                       futureUserData = FirebaseApi.selectData();
                       // nameController.clear();
                       setState(() {});
@@ -72,11 +81,11 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
 
                           setState(() {});
                         },
-                        child: ListTile(
-                          title: Text(
-                            snapshot.data![index]['userName'],
-                          ),
-                          subtitle: Text(snapshot.data![index]['key']),
+                        child: Column(
+                          children: [
+                            Text(snapshot.data![index]['key']),
+                            Text(snapshot.data![index]['userName']),
+                          ],
                         ),
                       ),
                     ),
