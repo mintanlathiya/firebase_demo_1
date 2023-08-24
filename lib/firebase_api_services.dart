@@ -4,13 +4,21 @@ import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseApi {
   static final _db = FirebaseDatabase.instance.ref('User');
-  static Future<void> addUser(
-      {required String userName, required String lastName}) async {
+  static Future<void> addUser({
+    required String userName,
+    required String lastName,
+    required String gender,
+    required double selectedSalary,
+    required List selectedHobbies,
+  }) async {
     String key = _db.push().key!;
     await _db.child(key).set({
       'key': key,
       'userName': userName,
       'lastName': lastName,
+      'gender': gender,
+      'hobby': selectedHobbies,
+      'salary': selectedSalary,
     });
   }
 
@@ -27,14 +35,21 @@ class FirebaseApi {
     return userData;
   }
 
-  static Future<void> updateData(
-      {required String key,
-      required String userName,
-      required String lastName}) async {
+  static Future<void> updateData({
+    required String key,
+    required String userName,
+    required String lastName,
+    required String gender,
+    required List selectedHobbies,
+    required double selectedSalary,
+  }) async {
     await _db.child(key).set({
       'key': key,
       'userName': userName,
       'lastName': lastName,
+      'gender': gender,
+      'hobby': selectedHobbies,
+      'salary': selectedSalary,
     });
   }
 
