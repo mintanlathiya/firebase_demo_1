@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_demo_1/simplecrud.dart';
+import 'package:firebase_demo_1/firebase_api/simplecrud.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {

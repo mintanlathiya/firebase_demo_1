@@ -1,4 +1,4 @@
-import 'package:firebase_demo_1/firebase_api_services.dart';
+import 'package:firebase_demo_1/firebase_api/firebase_api_services.dart';
 import 'package:flutter/material.dart';
 
 class SimpleCrudDemo extends StatefulWidget {
@@ -21,7 +21,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
 
   @override
   void initState() {
-    futureUserData = FirebaseApi.selectData();
+    futureUserData = FirebaseApi1.selectData();
     super.initState();
   }
 
@@ -112,7 +112,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                       if (isSinging == true) {
                         selectedHobbies.add('singing');
                       }
-                      await FirebaseApi.updateData(
+                      await FirebaseApi1.updateData(
                           key: selectKey,
                           userName: nameController.text,
                           lastName: lastNameController.text,
@@ -120,7 +120,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                           selectedHobbies:
                               List.from(selectedHobbies.map((e) => e)),
                           selectedSalary: selectedSalary);
-                      futureUserData = FirebaseApi.selectData();
+                      futureUserData = FirebaseApi1.selectData();
                       nameController.clear();
                       lastNameController.clear();
                       gender = 'gender';
@@ -142,7 +142,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                       if (isSinging == true) {
                         selectedHobbies.add('singing');
                       }
-                      await FirebaseApi.addUser(
+                      await FirebaseApi1.addUser(
                         userName: nameController.text,
                         lastName: lastNameController.text,
                         gender: gender,
@@ -150,7 +150,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                             List.from(selectedHobbies.map((e) => e)),
                         selectedSalary: selectedSalary,
                       );
-                      futureUserData = FirebaseApi.selectData();
+                      futureUserData = FirebaseApi1.selectData();
                       nameController.clear();
                       lastNameController.clear();
                       gender = 'gender';
@@ -200,10 +200,10 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                       child: Dismissible(
                         key: UniqueKey(),
                         onDismissed: (direction) async {
-                          await FirebaseApi.removeData(
+                          await FirebaseApi1.removeData(
                               key: snapshot.data![index]['key']);
                           update = false;
-                          futureUserData = FirebaseApi.selectData();
+                          futureUserData = FirebaseApi1.selectData();
 
                           setState(() {});
                         },
