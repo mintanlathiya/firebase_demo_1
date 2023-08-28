@@ -13,6 +13,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
   TextEditingController lastNameController = TextEditingController();
   String gender = 'gender', male = 'male', feMale = 'feMale';
   bool isCricket = false, isFootball = false, isSinging = false;
+  bool isActive = false;
   List selectedHobbies = [];
   double selectedSalary = 0;
   late Future<List<Map>> futureUserData;
@@ -98,6 +99,13 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
               min: 0,
               max: 50000,
             ),
+            Switch(
+              value: isActive,
+              onChanged: (value) {
+                isActive = value;
+                setState(() {});
+              },
+            ),
             const SizedBox(height: 10),
             MaterialButton(
               onPressed: update == true
@@ -119,7 +127,8 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                           gender: gender,
                           selectedHobbies:
                               List.from(selectedHobbies.map((e) => e)),
-                          selectedSalary: selectedSalary);
+                          selectedSalary: selectedSalary,
+                          isActive: isActive);
                       futureUserData = FirebaseApi1.selectData();
                       nameController.clear();
                       lastNameController.clear();
@@ -128,6 +137,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                       isFootball = false;
                       isSinging = false;
                       selectedSalary = 0;
+                      isActive = false;
                       update = false;
                       setState(() {});
                     }
@@ -143,13 +153,13 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                         selectedHobbies.add('singing');
                       }
                       await FirebaseApi1.addUser(
-                        userName: nameController.text,
-                        lastName: lastNameController.text,
-                        gender: gender,
-                        selectedHobbies:
-                            List.from(selectedHobbies.map((e) => e)),
-                        selectedSalary: selectedSalary,
-                      );
+                          userName: nameController.text,
+                          lastName: lastNameController.text,
+                          gender: gender,
+                          selectedHobbies:
+                              List.from(selectedHobbies.map((e) => e)),
+                          selectedSalary: selectedSalary,
+                          isActive: isActive);
                       futureUserData = FirebaseApi1.selectData();
                       nameController.clear();
                       lastNameController.clear();
@@ -158,6 +168,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                       isFootball = false;
                       isSinging = false;
                       selectedSalary = 0;
+                      isActive = false;
                       setState(() {});
                     },
               child: Text(update == false ? 'submit' : 'update'),
@@ -193,7 +204,9 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                             .contains('singing')) {
                           isSinging = true;
                         }
-                        selectedSalary = snapshot.data![index]['salary'];
+                        selectedSalary = double.parse(
+                            snapshot.data![index]['salary'].toString());
+                        isActive = snapshot.data![index]['active'];
 
                         setState(() {});
                       },
@@ -217,6 +230,7 @@ class _SimpleCrudDemoState extends State<SimpleCrudDemo> {
                             Text('Gender: ${snapshot.data![index]['gender']}'),
                             Text('Hobby: ${snapshot.data![index]['hobby']}'),
                             Text('Salary: ${snapshot.data![index]['salary']}'),
+                            Text('Active: ${snapshot.data![index]['active']}'),
                           ],
                         ),
                       ),

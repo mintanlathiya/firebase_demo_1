@@ -10,6 +10,7 @@ class FirebaseApi1 {
     required String gender,
     required double selectedSalary,
     required List selectedHobbies,
+    required bool isActive,
   }) async {
     String key = _db.push().key!;
     await _db.child(key).set({
@@ -19,6 +20,7 @@ class FirebaseApi1 {
       'gender': gender,
       'hobby': selectedHobbies,
       'salary': selectedSalary,
+      'active': isActive
     });
   }
 
@@ -42,6 +44,7 @@ class FirebaseApi1 {
     required String gender,
     required List selectedHobbies,
     required double selectedSalary,
+    required bool isActive,
   }) async {
     await _db.child(key).set({
       'key': key,
@@ -50,6 +53,7 @@ class FirebaseApi1 {
       'gender': gender,
       'hobby': selectedHobbies,
       'salary': selectedSalary,
+      'active': isActive
     });
   }
 
